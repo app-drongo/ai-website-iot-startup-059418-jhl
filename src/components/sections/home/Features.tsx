@@ -1,131 +1,201 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Cpu, Shield, Zap, BarChart3, Globe, Settings } from 'lucide-react';
+import { Check, Zap, Shield, Rocket, Globe, Users, BarChart3 } from 'lucide-react';
+import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 
 const DEFAULT_FEATURES = {
-  sectionTitle: 'Powerful IoT Capabilities Built for Scale',
-  sectionSubtitle: 'Everything you need to deploy, manage, and optimize your IoT infrastructure',
+  title: 'Powerful Features for Modern Teams',
+  subtitle: 'Everything you need to scale your tech startup from MVP to enterprise',
+  description:
+    'Our platform combines cutting-edge technology with intuitive design to help you build, deploy, and scale faster than ever before.',
+  ctaText: 'Start Free Trial',
+  ctaHref: '/signup',
+  secondaryCtaText: 'View Pricing',
+  secondaryCtaHref: '/pricing',
   features: [
     {
-      icon: 'Cpu',
-      title: 'Edge Computing',
+      id: '1',
+      icon: 'Zap',
+      title: 'Lightning Fast Performance',
       description:
-        'Process data locally with our advanced edge computing platform, reducing latency and improving response times for critical IoT applications.',
-      badge: 'Real-time',
+        'Built on modern infrastructure with edge computing for sub-100ms response times globally.',
+      highlights: ['99.99% uptime SLA', 'Global CDN', 'Auto-scaling'],
     },
     {
+      id: '2',
       icon: 'Shield',
       title: 'Enterprise Security',
       description:
-        'Bank-grade encryption and multi-layer security protocols protect your IoT devices and data from cyber threats and unauthorized access.',
-      badge: 'Secure',
+        'Bank-grade security with SOC 2 compliance, end-to-end encryption, and advanced threat protection.',
+      highlights: ['SOC 2 Type II', 'Zero-trust architecture', '24/7 monitoring'],
     },
     {
-      icon: 'Zap',
-      title: 'Instant Deployment',
+      id: '3',
+      icon: 'Rocket',
+      title: 'Rapid Deployment',
       description:
-        'Deploy thousands of IoT devices in minutes with our automated provisioning system and zero-touch configuration capabilities.',
-      badge: 'Fast',
+        'Deploy in minutes with our automated CI/CD pipeline and one-click infrastructure provisioning.',
+      highlights: ['One-click deploy', 'Auto rollbacks', 'Blue-green deployments'],
     },
     {
+      id: '4',
+      icon: 'Globe',
+      title: 'Global Scale',
+      description:
+        'Reach users worldwide with our multi-region infrastructure and intelligent traffic routing.',
+      highlights: ['15+ regions', 'Smart routing', 'Edge caching'],
+    },
+    {
+      id: '5',
+      icon: 'Users',
+      title: 'Team Collaboration',
+      description:
+        'Built-in tools for code review, project management, and real-time collaboration across teams.',
+      highlights: ['Real-time sync', 'Role-based access', 'Audit logs'],
+    },
+    {
+      id: '6',
       icon: 'BarChart3',
       title: 'Advanced Analytics',
       description:
-        'Transform raw sensor data into actionable insights with machine learning algorithms and predictive analytics dashboards.',
-      badge: 'Smart',
-    },
-    {
-      icon: 'Globe',
-      title: 'Global Connectivity',
-      description:
-        'Connect devices worldwide with support for 5G, LoRaWAN, NB-IoT, and satellite networks for comprehensive coverage.',
-      badge: 'Connected',
-    },
-    {
-      icon: 'Settings',
-      title: 'Device Management',
-      description:
-        'Monitor, update, and control your entire IoT fleet from a single dashboard with remote diagnostics and OTA updates.',
-      badge: 'Managed',
+        'Deep insights into performance, user behavior, and business metrics with custom dashboards.',
+      highlights: ['Real-time metrics', 'Custom dashboards', 'AI insights'],
     },
   ],
 } as const;
 
 type FeaturesProps = Partial<typeof DEFAULT_FEATURES>;
 
+const iconMap = {
+  Zap,
+  Shield,
+  Rocket,
+  Globe,
+  Users,
+  BarChart3,
+};
+
 export default function Features(props: FeaturesProps) {
   const config = { ...DEFAULT_FEATURES, ...props };
+  const navigate = useSmartNavigation();
 
-  const getIcon = (iconName: string) => {
-    const icons = {
-      Cpu,
-      Shield,
-      Zap,
-      BarChart3,
-      Globe,
-      Settings,
-    };
-    const IconComponent = icons[iconName as keyof typeof icons] || Cpu;
-    return <IconComponent className="h-8 w-8 text-primary" />;
+  const handleCtaClick = () => {
+    navigate(config.ctaHref);
+  };
+
+  const handleSecondaryCtaClick = () => {
+    navigate(config.secondaryCtaHref);
   };
 
   return (
-    <section id="features" className="bg-background text-foreground py-20">
+    <section id="features" className="bg-background text-foreground py-24 sm:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center max-w-4xl mx-auto mb-20">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-            <span data-editable="sectionTitle">{config.sectionTitle}</span>
+            <span data-editable="title">{config.title}</span>
           </h2>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
-            <span data-editable="sectionSubtitle">{config.sectionSubtitle}</span>
+          <p className="text-xl sm:text-2xl text-muted-foreground mb-6">
+            <span data-editable="subtitle">{config.subtitle}</span>
           </p>
+          <p className="text-lg text-muted-foreground mb-8">
+            <span data-editable="description">{config.description}</span>
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              size="lg"
+              onClick={handleCtaClick}
+              data-editable-href="ctaHref"
+              data-href={config.ctaHref}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              <span data-editable="ctaText">{config.ctaText}</span>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={handleSecondaryCtaClick}
+              data-editable-href="secondaryCtaHref"
+              data-href={config.secondaryCtaHref}
+              className="border-border hover:bg-accent hover:text-accent-foreground"
+            >
+              <span data-editable="secondaryCtaText">{config.secondaryCtaText}</span>
+            </Button>
+          </div>
         </div>
 
         {/* Features Grid */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {config.features.map((feature, idx) => (
-            <Card
-              key={idx}
-              className="bg-card text-card-foreground border-border hover:bg-accent/5 transition-colors duration-300 group"
-            >
-              <CardContent className="p-8">
-                {/* Icon and Badge */}
-                <div className="flex items-start justify-between mb-6">
-                  <div className="p-3 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors duration-300">
-                    {getIcon(feature.icon)}
-                  </div>
-                  <Badge variant="secondary" className="bg-secondary text-secondary-foreground">
-                    <span data-editable={`features[${idx}].badge`}>{feature.badge}</span>
-                  </Badge>
-                </div>
+          {config.features.map((feature, idx) => {
+            const IconComponent = iconMap[feature.icon as keyof typeof iconMap] || Zap;
 
-                {/* Content */}
-                <div className="space-y-4">
-                  <h3 className="text-xl font-semibold">
-                    <span data-editable={`features[${idx}].title`}>{feature.title}</span>
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+            return (
+              <Card
+                key={feature.id}
+                className="bg-card text-card-foreground border-border hover:shadow-lg transition-shadow duration-300"
+              >
+                <CardContent className="p-8">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-primary/10 text-primary p-3 rounded-lg mr-4">
+                      <IconComponent className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-semibold">
+                      <span data-editable={`features[${idx}].title`}>{feature.title}</span>
+                    </h3>
+                  </div>
+
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
                     <span data-editable={`features[${idx}].description`}>
                       {feature.description}
                     </span>
                   </p>
-                </div>
 
-                {/* Hover Effect Line */}
-                <div className="mt-6 h-1 bg-gradient-to-r from-primary to-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </CardContent>
-            </Card>
-          ))}
+                  <div className="space-y-2">
+                    {feature.highlights.map((highlight, highlightIdx) => (
+                      <div key={highlightIdx} className="flex items-center text-sm">
+                        <Check className="w-4 h-4 text-primary mr-2 flex-shrink-0" />
+                        <span data-editable={`features[${idx}].highlights[${highlightIdx}]`}>
+                          {highlight}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
-        {/* Bottom Accent */}
-        <div className="mt-20 text-center">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-muted text-muted-foreground rounded-full">
-            <Zap className="h-4 w-4" />
-            <span className="text-sm font-medium">Trusted by 500+ enterprises worldwide</span>
+        {/* Bottom CTA */}
+        <div className="text-center mt-20">
+          <div className="bg-muted text-muted-foreground rounded-2xl p-8 sm:p-12">
+            <h3 className="text-2xl sm:text-3xl font-bold mb-4 text-foreground">
+              Ready to transform your development workflow?
+            </h3>
+            <p className="text-lg mb-8 max-w-2xl mx-auto">
+              Join thousands of developers who have already accelerated their projects with our
+              platform.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                onClick={handleCtaClick}
+                data-editable-href="ctaHref"
+                data-href={config.ctaHref}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                <span data-editable="ctaText">{config.ctaText}</span>
+              </Button>
+              <Badge
+                variant="secondary"
+                className="bg-secondary text-secondary-foreground px-4 py-2 text-sm"
+              >
+                No credit card required
+              </Badge>
+            </div>
           </div>
         </div>
       </div>

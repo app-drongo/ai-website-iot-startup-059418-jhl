@@ -3,25 +3,29 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Shield, Zap, Award } from 'lucide-react';
+import { ArrowRight, Zap, Shield, Rocket } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 
 const DEFAULT_HERO = {
-  title: 'Transform Your Business with Next-Generation IoT Solutions',
+  title: 'Build the Future with AI-Powered Solutions',
   subtitle:
-    'Empower your operations with intelligent sensors, real-time analytics, and seamless connectivity. Built for enterprises ready to embrace the future of connected technology.',
-  ctaText: 'Start Your IoT Journey',
-  ctaHref: '/get-started',
-  secondaryCtaText: 'Watch Demo',
+    'Transform your business with cutting-edge technology that scales. Join thousands of companies already accelerating their growth.',
+  ctaText: 'Start Free Trial',
+  ctaHref: '/signup',
+  secondaryCtaText: 'View Demo',
   secondaryCtaHref: '/demo',
   heroImageUrl:
-    'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=2125&auto=format&fit=crop',
-  heroImageAlt: 'Modern IoT dashboard with connected devices visualization',
-  trustIndicators: ['Enterprise-grade security', '99.9% uptime guarantee', 'ISO 27001 certified'],
-  statsLabel: 'Trusted by 500+ enterprises worldwide',
-  backgroundPattern: true,
+    'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop&crop=center',
+  heroImageAlt: 'Modern tech workspace with multiple screens showing analytics',
+  features: ['99.9% Uptime Guarantee', 'Enterprise Security', '24/7 Support'],
+  stats: [
+    { label: 'Active Users', value: '50K+' },
+    { label: 'Countries', value: '120+' },
+    { label: 'Uptime', value: '99.9%' },
+  ],
+  trustBadge: 'Trusted by Fortune 500 companies',
 } as const;
 
 type HeroProps = Partial<typeof DEFAULT_HERO>;
@@ -44,43 +48,40 @@ export default function Hero(props: HeroProps) {
   };
 
   return (
-    <section id="hero" className="relative bg-background text-foreground overflow-hidden">
-      {/* Background Pattern */}
-      {config.backgroundPattern && (
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-      )}
-
-      <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-        <div className="grid gap-12 lg:gap-20 lg:grid-cols-2 items-center">
+    <section id="hero" className="bg-background text-foreground py-20 lg:py-32 overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           {/* Content Column */}
           <div
             className={`space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
           >
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap gap-3">
-              {config.trustIndicators.map((indicator, idx) => (
-                <Badge
-                  key={idx}
-                  variant="secondary"
-                  className="bg-secondary text-secondary-foreground px-3 py-1 text-sm font-medium"
-                >
-                  {idx === 0 && <Shield className="w-3 h-3 mr-1" />}
-                  {idx === 1 && <Zap className="w-3 h-3 mr-1" />}
-                  {idx === 2 && <Award className="w-3 h-3 mr-1" />}
-                  <span data-editable={`trustIndicators[${idx}]`}>{indicator}</span>
-                </Badge>
-              ))}
-            </div>
+            {/* Trust Badge */}
+            <Badge
+              variant="secondary"
+              className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors"
+            >
+              <Shield className="w-4 h-4 mr-2" />
+              <span data-editable="trustBadge">{config.trustBadge}</span>
+            </Badge>
 
             {/* Main Heading */}
-            <div className="space-y-6">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+            <div className="space-y-4">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
                 <span data-editable="title">{config.title}</span>
               </h1>
-
-              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl">
+              <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
                 <span data-editable="subtitle">{config.subtitle}</span>
               </p>
+            </div>
+
+            {/* Features List */}
+            <div className="flex flex-wrap gap-4">
+              {config.features.map((feature, idx) => (
+                <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Zap className="w-4 h-4 text-primary" />
+                  <span data-editable={`features[${idx}]`}>{feature}</span>
+                </div>
+              ))}
             </div>
 
             {/* CTA Buttons */}
@@ -90,29 +91,35 @@ export default function Hero(props: HeroProps) {
                 onClick={handlePrimaryCTA}
                 data-editable-href="ctaHref"
                 data-href={config.ctaHref}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-lg font-semibold group"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 group"
               >
                 <span data-editable="ctaText">{config.ctaText}</span>
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-
               <Button
                 variant="outline"
                 size="lg"
                 onClick={handleSecondaryCTA}
                 data-editable-href="secondaryCtaHref"
                 data-href={config.secondaryCtaHref}
-                className="border-border text-foreground hover:bg-accent hover:text-accent-foreground px-8 py-6 text-lg font-semibold"
+                className="border-border hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 <span data-editable="secondaryCtaText">{config.secondaryCtaText}</span>
               </Button>
             </div>
 
             {/* Stats */}
-            <div className="pt-8 border-t border-border">
-              <p className="text-sm text-muted-foreground font-medium">
-                <span data-editable="statsLabel">{config.statsLabel}</span>
-              </p>
+            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-border">
+              {config.stats.map((stat, idx) => (
+                <div key={idx} className="text-center sm:text-left">
+                  <div className="text-2xl font-bold text-foreground">
+                    <span data-editable={`stats[${idx}].value`}>{stat.value}</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    <span data-editable={`stats[${idx}].label`}>{stat.label}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -120,9 +127,9 @@ export default function Hero(props: HeroProps) {
           <div
             className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
           >
-            <Card className="bg-card border-border shadow-2xl overflow-hidden">
+            <Card className="bg-card border-border overflow-hidden shadow-2xl">
               <CardContent className="p-0">
-                <div className="relative aspect-[4/3] lg:aspect-[3/4]">
+                <div className="relative aspect-[4/3] bg-gradient-to-br from-primary/10 to-accent/10">
                   <Image
                     src={config.heroImageUrl}
                     alt={config.heroImageAlt}
@@ -130,26 +137,22 @@ export default function Hero(props: HeroProps) {
                     fill
                     className="object-cover"
                     priority
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
 
-                  {/* Overlay Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/20 via-transparent to-transparent" />
-
-                  {/* Floating Elements */}
-                  <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-2 rounded-lg text-sm font-semibold shadow-lg">
-                    Live Dashboard
-                  </div>
-
-                  <div className="absolute bottom-4 left-4 bg-card text-card-foreground px-4 py-3 rounded-lg shadow-lg border border-border">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span className="text-sm font-medium">Connected Devices: 1,247</span>
-                    </div>
+                  {/* Floating elements for tech aesthetic */}
+                  <div className="absolute top-4 right-4 bg-primary/90 text-primary-foreground p-2 rounded-lg backdrop-blur-sm">
+                    <Rocket className="w-5 h-5" />
                   </div>
                 </div>
               </CardContent>
             </Card>
+
+            {/* Decorative elements */}
+            <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-xl" />
+            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-accent/10 rounded-full blur-xl" />
           </div>
         </div>
       </div>

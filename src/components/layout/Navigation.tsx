@@ -10,8 +10,8 @@ const DEFAULT_NAVIGATION = {
   brandName: 'IoTech',
   brandIcon: 'zap',
   navItems: [
-    { label: 'Hero', href: '#hero' },
-    { label: 'Features', href: '#features' },
+    { label: 'Home', href: '/' },
+    { label: 'Pricing', href: '/pricing' },
   ],
   ctaText: 'Get Started',
   ctaHref: '/contact',
