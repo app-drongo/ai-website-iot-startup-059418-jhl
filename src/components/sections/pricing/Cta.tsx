@@ -2,25 +2,30 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Check, Zap, Clock } from 'lucide-react';
-import { useSmartNavigation } from '@/hooks/useSmartNavigation';
+import { ArrowRight, Zap, Shield, Rocket } from 'lucide-react';
 import { useState } from 'react';
+import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 
 const DEFAULT_CTA = {
-  title: 'Ready to Transform Your Tech Stack?',
-  subtitle: "Join thousands of developers who've already upgraded their workflow",
+  companyName: 'Drongo',
+  title: 'Ready to Transform Your Business?',
+  subtitle:
+    'Join thousands of companies already using Drongo to accelerate their growth and streamline operations.',
   description:
-    'Get instant access to our premium features and save 35% with annual billing. No setup fees, no hidden costs.',
-  discountBadge: '35% OFF Annual',
-  discountText: 'Save $420/year with annual billing',
+    'Get started with our comprehensive platform designed for modern businesses. No setup fees, cancel anytime.',
   primaryCtaText: 'Start Free Trial',
   primaryCtaHref: '/signup',
-  secondaryCtaText: 'View Pricing',
-  secondaryCtaHref: '/pricing',
-  features: ['14-day free trial', 'Cancel anytime', 'Premium support included'],
-  urgencyText: 'Limited time offer',
-  trustText: 'Trusted by 50,000+ developers',
+  secondaryCtaText: 'Schedule Demo',
+  secondaryCtaHref: '/demo',
+  features: ['30-day free trial', 'No credit card required', '24/7 expert support'],
+  trustBadges: [
+    { icon: 'shield', text: 'Enterprise Security' },
+    { icon: 'zap', text: 'Lightning Fast' },
+    { icon: 'rocket', text: 'Scale Ready' },
+  ],
+  testimonialText: 'Drongo helped us increase efficiency by 300% in just 3 months.',
+  testimonialAuthor: 'Sarah Chen',
+  testimonialRole: 'CTO, TechFlow Inc',
 } as const;
 
 type CtaProps = Partial<typeof DEFAULT_CTA>;
@@ -38,102 +43,117 @@ export default function Cta(props: CtaProps) {
     navigate(config.secondaryCtaHref);
   };
 
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'shield':
+        return <Shield className="h-5 w-5" />;
+      case 'zap':
+        return <Zap className="h-5 w-5" />;
+      case 'rocket':
+        return <Rocket className="h-5 w-5" />;
+      default:
+        return <Zap className="h-5 w-5" />;
+    }
+  };
+
   return (
     <section
       id="cta"
       className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 lg:py-32"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-2xl max-w-4xl mx-auto">
-          <CardContent className="p-8 sm:p-12 lg:p-16">
-            {/* Header Section */}
-            <div className="text-center mb-12">
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <Badge
-                  variant="secondary"
-                  className="bg-primary/10 text-primary border-primary/20 px-4 py-2"
-                >
-                  <Zap className="w-4 h-4 mr-2" />
-                  <span data-editable="discountBadge">{config.discountBadge}</span>
-                </Badge>
-                <Badge variant="outline" className="border-accent text-accent-foreground px-3 py-1">
-                  <Clock className="w-3 h-3 mr-1" />
-                  <span data-editable="urgencyText">{config.urgencyText}</span>
-                </Badge>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">
-                <span data-editable="title">{config.title}</span>
-              </h2>
-
-              <p className="text-xl text-muted-foreground mb-4 max-w-2xl mx-auto">
-                <span data-editable="subtitle">{config.subtitle}</span>
-              </p>
-
-              <p className="text-lg text-foreground/80 mb-8">
-                <span data-editable="description">{config.description}</span>
-              </p>
-
-              <div className="bg-accent/20 border border-accent/30 rounded-lg p-4 mb-8 inline-block">
-                <p className="text-accent-foreground font-semibold">
-                  <span data-editable="discountText">{config.discountText}</span>
-                </p>
-              </div>
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <Zap className="h-4 w-4" />
+              <span data-editable="companyName">{config.companyName}</span>
             </div>
 
-            {/* Features List */}
-            <div className="flex flex-wrap justify-center gap-6 mb-12">
-              {config.features.map((feature, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-muted-foreground">
-                  <div className="bg-primary/10 rounded-full p-1">
-                    <Check className="w-4 h-4 text-primary" />
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+              <span data-editable="title">{config.title}</span>
+            </h2>
+
+            <p className="text-lg sm:text-xl text-muted-foreground mb-4 max-w-3xl mx-auto">
+              <span data-editable="subtitle">{config.subtitle}</span>
+            </p>
+
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              <span data-editable="description">{config.description}</span>
+            </p>
+          </div>
+
+          {/* Main CTA Card */}
+          <Card className="bg-card/50 backdrop-blur-sm border-border/50 shadow-lg">
+            <CardContent className="p-8 sm:p-12">
+              {/* Features List */}
+              <div className="flex flex-wrap justify-center gap-6 mb-8">
+                {config.features.map((feature, idx) => (
+                  <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="h-2 w-2 bg-primary rounded-full" />
+                    <span data-editable={`features[${idx}]`}>{feature}</span>
                   </div>
-                  <span data-editable={`features[${idx}]`} className="text-sm font-medium">
-                    {feature}
-                  </span>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <Button
-                size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                onClick={handlePrimaryClick}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                data-editable-href="primaryCtaHref"
-                data-href={config.primaryCtaHref}
-              >
-                <span data-editable="primaryCtaText">{config.primaryCtaText}</span>
-                <ArrowRight
-                  className={`w-5 h-5 ml-2 transition-transform duration-300 ${
-                    isHovered ? 'translate-x-1' : ''
-                  }`}
-                />
-              </Button>
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                <Button
+                  size="lg"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 group"
+                  onClick={handlePrimaryClick}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  data-editable-href="primaryCtaHref"
+                  data-href={config.primaryCtaHref}
+                >
+                  <span data-editable="primaryCtaText">{config.primaryCtaText}</span>
+                  <ArrowRight
+                    className={`ml-2 h-4 w-4 transition-transform duration-200 ${isHovered ? 'translate-x-1' : ''}`}
+                  />
+                </Button>
 
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-border text-foreground hover:bg-accent hover:text-accent-foreground px-8 py-4 text-lg font-medium transition-all duration-300"
-                onClick={handleSecondaryClick}
-                data-editable-href="secondaryCtaHref"
-                data-href={config.secondaryCtaHref}
-              >
-                <span data-editable="secondaryCtaText">{config.secondaryCtaText}</span>
-              </Button>
-            </div>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-border hover:bg-accent hover:text-accent-foreground transition-colors duration-200"
+                  onClick={handleSecondaryClick}
+                  data-editable-href="secondaryCtaHref"
+                  data-href={config.secondaryCtaHref}
+                >
+                  <span data-editable="secondaryCtaText">{config.secondaryCtaText}</span>
+                </Button>
+              </div>
 
-            {/* Trust Signal */}
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">
-                <span data-editable="trustText">{config.trustText}</span>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+              {/* Trust Badges */}
+              <div className="flex flex-wrap justify-center gap-6 mb-8">
+                {config.trustBadges.map((badge, idx) => (
+                  <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="text-primary">{getIcon(badge.icon)}</div>
+                    <span data-editable={`trustBadges[${idx}].text`}>{badge.text}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Testimonial */}
+              <div className="text-center border-t border-border/50 pt-8">
+                <blockquote className="text-foreground font-medium mb-3">
+                  "<span data-editable="testimonialText">{config.testimonialText}</span>"
+                </blockquote>
+                <cite className="text-sm text-muted-foreground not-italic">
+                  <span data-editable="testimonialAuthor">{config.testimonialAuthor}</span>
+                  {', '}
+                  <span data-editable="testimonialRole">{config.testimonialRole}</span>
+                </cite>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Bottom Note */}
+          <div className="text-center mt-8">
+            <p className="text-sm text-muted-foreground">Trusted by 10,000+ businesses worldwide</p>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 
 const DEFAULT_NAVIGATION = {
-  brandName: 'IoTech',
+  brandName: 'Drongo',
   brandIcon: 'zap',
   navItems: [
     { label: 'Home', href: '/' },

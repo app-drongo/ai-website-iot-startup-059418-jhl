@@ -1,53 +1,43 @@
 'use client';
 
-import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronUp, HelpCircle, Star, Check } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown, MessageCircle } from 'lucide-react';
+import { useState } from 'react';
 import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 
 const DEFAULT_FAQ = {
   title: 'Frequently Asked Questions',
-  subtitle: 'Everything you need to know about our pricing and features',
-  ctaText: 'Start Free Trial',
-  ctaHref: '/signup',
-  discountBadge: '35% OFF Annual Plans',
+  subtitle: 'Everything you need to know about Drongo',
+  description: "Can't find the answer you're looking for? Reach out to our customer support team.",
+  contactText: 'Contact Support',
+  contactHref: '/contact',
   faqs: [
     {
-      id: 'pricing',
-      question: 'How much does it cost?',
+      question: 'What is Drongo and how does it work?',
       answer:
-        "Our plans start at $29/month for the Starter plan, $79/month for Pro, and $199/month for Enterprise. Save 35% when you pay annually - that's just $18.85/month for Starter, $51.35/month for Pro, and $129.35/month for Enterprise.",
+        'Drongo is a cutting-edge tech platform that streamlines your workflow with intelligent automation. Our AI-powered system learns from your patterns and optimizes processes in real-time, helping you achieve more with less effort.',
     },
     {
-      id: 'annual-discount',
-      question: "What's included in the 35% annual discount?",
+      question: 'How much does Drongo cost?',
       answer:
-        'When you choose annual billing, you get 35% off all plans plus priority support, extended data retention, and access to beta features. The discount applies automatically at checkout and renews at the same rate.',
+        'We offer flexible pricing plans to suit teams of all sizes. Our Starter plan begins at $29/month, Professional at $99/month, and Enterprise with custom pricing. All plans include a 14-day free trial with no credit card required.',
     },
     {
-      id: 'features',
-      question: 'What features are included in each plan?',
+      question: 'Is my data secure with Drongo?',
       answer:
-        'Starter includes core analytics, 10K events/month, and email support. Pro adds advanced reporting, 100K events/month, integrations, and chat support. Enterprise includes everything plus custom limits, dedicated support, and SSO.',
+        'Absolutely. We use enterprise-grade encryption, SOC 2 compliance, and follow industry best practices for data security. Your data is encrypted both in transit and at rest, and we never share your information with third parties.',
     },
     {
-      id: 'trial',
-      question: 'Do you offer a free trial?',
+      question: 'Can I integrate Drongo with my existing tools?',
       answer:
-        "Yes! All plans come with a 14-day free trial. No credit card required. You'll have full access to all features during your trial period.",
+        'Yes! Drongo integrates seamlessly with over 100+ popular tools including Slack, Google Workspace, Microsoft 365, Salesforce, and many more. Our API also allows for custom integrations to fit your specific workflow needs.',
     },
     {
-      id: 'cancellation',
-      question: 'Can I cancel anytime?',
+      question: 'What kind of support do you offer?',
       answer:
-        "Absolutely. You can cancel your subscription at any time from your account settings. For annual plans, you'll continue to have access until the end of your billing period.",
-    },
-    {
-      id: 'support',
-      question: 'What kind of support do you provide?',
-      answer:
-        'We offer email support for all plans, live chat for Pro and Enterprise, and dedicated account management for Enterprise customers. Our average response time is under 2 hours.',
+        'We provide 24/7 customer support via chat and email for all paid plans. Enterprise customers also get dedicated account management and priority phone support. Plus, we have extensive documentation and video tutorials to help you get started.',
     },
   ],
 } as const;
@@ -57,110 +47,85 @@ type FaqProps = Partial<typeof DEFAULT_FAQ>;
 export default function Faq(props: FaqProps) {
   const config = { ...DEFAULT_FAQ, ...props };
   const navigate = useSmartNavigation();
-  const [openItems, setOpenItems] = useState<Set<string>>(new Set());
+  const [openItems, setOpenItems] = useState<number[]>([]);
 
-  const toggleItem = (id: string) => {
-    const newOpenItems = new Set(openItems);
-    if (newOpenItems.has(id)) {
-      newOpenItems.delete(id);
-    } else {
-      newOpenItems.add(id);
-    }
-    setOpenItems(newOpenItems);
+  const toggleItem = (index: number) => {
+    setOpenItems(prev => (prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]));
   };
 
-  const handleCtaClick = () => {
-    navigate(config.ctaHref);
+  const handleContactClick = () => {
+    navigate(config.contactHref);
   };
 
   return (
-    <section id="faq" className="bg-background text-foreground py-20">
+    <section id="faq" className="bg-background text-foreground py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
-            <Star className="w-4 h-4" />
-            <span data-editable="discountBadge">{config.discountBadge}</span>
-          </div>
-
-          <h2 className="text-4xl sm:text-5xl font-bold mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
             <span data-editable="title">{config.title}</span>
           </h2>
-
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground mb-2">
             <span data-editable="subtitle">{config.subtitle}</span>
+          </p>
+          <p className="text-muted-foreground">
+            <span data-editable="description">{config.description}</span>
           </p>
         </div>
 
         {/* FAQ Items */}
         <div className="space-y-4 mb-12">
-          {config.faqs.map((faq, idx) => {
-            const isOpen = openItems.has(faq.id);
-
-            return (
-              <Card key={faq.id} className="bg-card text-card-foreground border-border">
-                <CardContent className="p-0">
-                  <button
-                    onClick={() => toggleItem(faq.id)}
-                    className="w-full p-6 text-left flex items-center justify-between hover:bg-accent/50 transition-colors rounded-lg"
-                    aria-expanded={isOpen}
-                    aria-controls={`faq-answer-${faq.id}`}
+          {config.faqs.map((faq, index) => (
+            <Card key={index} className="bg-card text-card-foreground border-border">
+              <Collapsible open={openItems.includes(index)} onOpenChange={() => toggleItem(index)}>
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-between p-6 h-auto text-left hover:bg-accent hover:text-accent-foreground"
                   >
-                    <h3 className="text-lg font-semibold pr-4">
-                      <span data-editable={`faqs[${idx}].question`}>{faq.question}</span>
-                    </h3>
-
-                    <div className="flex-shrink-0">
-                      {isOpen ? (
-                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                      ) : (
-                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                      )}
-                    </div>
-                  </button>
-
-                  {isOpen && (
-                    <div
-                      id={`faq-answer-${faq.id}`}
-                      className="px-6 pb-6 pt-0 animate-in slide-in-from-top-2 duration-200"
-                    >
-                      <div className="text-muted-foreground leading-relaxed">
-                        <span data-editable={`faqs[${idx}].answer`}>{faq.answer}</span>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          })}
+                    <span className="text-lg font-semibold pr-4">
+                      <span data-editable={`faqs[${index}].question`}>{faq.question}</span>
+                    </span>
+                    <ChevronDown
+                      className={`h-5 w-5 shrink-0 transition-transform duration-200 ${
+                        openItems.includes(index) ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="px-6 pb-6">
+                  <CardContent className="p-0">
+                    <p className="text-muted-foreground leading-relaxed">
+                      <span data-editable={`faqs[${index}].answer`}>{faq.answer}</span>
+                    </p>
+                  </CardContent>
+                </CollapsibleContent>
+              </Collapsible>
+            </Card>
+          ))}
         </div>
 
-        {/* CTA Section */}
+        {/* Contact CTA */}
         <div className="text-center">
-          <div className="bg-primary/5 border border-primary/20 rounded-2xl p-8">
-            <div className="flex justify-center mb-4">
-              <div className="bg-primary/10 p-3 rounded-full">
-                <HelpCircle className="w-6 h-6 text-primary" />
+          <Card className="bg-muted text-muted-foreground p-8 inline-block">
+            <CardContent className="p-0">
+              <div className="flex items-center justify-center mb-4">
+                <MessageCircle className="h-8 w-8 text-primary mr-3" />
+                <h3 className="text-xl font-semibold text-foreground">Still have questions?</h3>
               </div>
-            </div>
-
-            <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
-
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              Start your free trial today and experience all features risk-free for 14 days.
-            </p>
-
-            <Button
-              onClick={handleCtaClick}
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 px-8"
-              data-editable-href="ctaHref"
-              data-href={config.ctaHref}
-            >
-              <Check className="w-4 h-4 mr-2" />
-              <span data-editable="ctaText">{config.ctaText}</span>
-            </Button>
-          </div>
+              <p className="mb-6 text-muted-foreground">
+                Our team is here to help you get the most out of Drongo.
+              </p>
+              <Button
+                onClick={handleContactClick}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                data-editable-href="contactHref"
+                data-href={config.contactHref}
+              >
+                <span data-editable="contactText">{config.contactText}</span>
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>

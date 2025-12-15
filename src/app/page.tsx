@@ -4,7 +4,7 @@ import Hero from '@/components/sections/home/Hero'
 import Features from '@/components/sections/home/Features'
 
 export const metadata: Metadata = {
-  title: 'IoT Startup',
+  title: 'Drongo',
   description: 'Welcome to Home',
 }
 
