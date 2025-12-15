@@ -3,200 +3,153 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Check, Zap, Shield, Rocket, Globe, Users, BarChart3 } from 'lucide-react';
+import { Check, Zap, Shield, Rocket, Star, ArrowRight } from 'lucide-react';
 import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 
 const DEFAULT_FEATURES = {
   title: 'Powerful Features for Modern Teams',
-  subtitle: 'Everything you need to scale your tech startup from MVP to enterprise',
-  description:
-    'Our platform combines cutting-edge technology with intuitive design to help you build, deploy, and scale faster than ever before.',
+  subtitle: 'Everything you need to build, deploy, and scale your applications with confidence',
   ctaText: 'Start Free Trial',
   ctaHref: '/signup',
-  secondaryCtaText: 'View Pricing',
-  secondaryCtaHref: '/pricing',
+  badge: 'New Features',
   features: [
     {
-      id: '1',
       icon: 'Zap',
       title: 'Lightning Fast Performance',
       description:
-        'Built on modern infrastructure with edge computing for sub-100ms response times globally.',
-      highlights: ['99.99% uptime SLA', 'Global CDN', 'Auto-scaling'],
+        'Deploy in seconds with our optimized infrastructure. 99.9% uptime guaranteed with global CDN coverage.',
+      highlights: ['Sub-second deployments', 'Global edge network', 'Auto-scaling'],
     },
     {
-      id: '2',
       icon: 'Shield',
       title: 'Enterprise Security',
       description:
-        'Bank-grade security with SOC 2 compliance, end-to-end encryption, and advanced threat protection.',
-      highlights: ['SOC 2 Type II', 'Zero-trust architecture', '24/7 monitoring'],
+        'Bank-grade security with end-to-end encryption, SOC 2 compliance, and advanced threat protection.',
+      highlights: ['256-bit encryption', 'SOC 2 certified', 'Zero-trust architecture'],
     },
     {
-      id: '3',
       icon: 'Rocket',
-      title: 'Rapid Deployment',
+      title: 'Developer Experience',
       description:
-        'Deploy in minutes with our automated CI/CD pipeline and one-click infrastructure provisioning.',
-      highlights: ['One-click deploy', 'Auto rollbacks', 'Blue-green deployments'],
-    },
-    {
-      id: '4',
-      icon: 'Globe',
-      title: 'Global Scale',
-      description:
-        'Reach users worldwide with our multi-region infrastructure and intelligent traffic routing.',
-      highlights: ['15+ regions', 'Smart routing', 'Edge caching'],
-    },
-    {
-      id: '5',
-      icon: 'Users',
-      title: 'Team Collaboration',
-      description:
-        'Built-in tools for code review, project management, and real-time collaboration across teams.',
-      highlights: ['Real-time sync', 'Role-based access', 'Audit logs'],
-    },
-    {
-      id: '6',
-      icon: 'BarChart3',
-      title: 'Advanced Analytics',
-      description:
-        'Deep insights into performance, user behavior, and business metrics with custom dashboards.',
-      highlights: ['Real-time metrics', 'Custom dashboards', 'AI insights'],
+        'Intuitive APIs, comprehensive documentation, and tools that developers love to use every day.',
+      highlights: ['RESTful APIs', 'SDK libraries', '24/7 support'],
     },
   ],
+  pricing: {
+    monthlyPrice: '$49',
+    annualPrice: '$32',
+    discount: '35% off',
+    billingNote: 'Billed annually',
+  },
 } as const;
 
 type FeaturesProps = Partial<typeof DEFAULT_FEATURES>;
-
-const iconMap = {
-  Zap,
-  Shield,
-  Rocket,
-  Globe,
-  Users,
-  BarChart3,
-};
 
 export default function Features(props: FeaturesProps) {
   const config = { ...DEFAULT_FEATURES, ...props };
   const navigate = useSmartNavigation();
 
-  const handleCtaClick = () => {
+  const handleCTAClick = () => {
     navigate(config.ctaHref);
   };
 
-  const handleSecondaryCtaClick = () => {
-    navigate(config.secondaryCtaHref);
+  const getIcon = (iconName: string) => {
+    const icons = {
+      Zap: Zap,
+      Shield: Shield,
+      Rocket: Rocket,
+    };
+    const IconComponent = icons[iconName as keyof typeof icons] || Zap;
+    return <IconComponent className="h-6 w-6" />;
   };
 
   return (
-    <section id="features" className="bg-background text-foreground py-24 sm:py-32">
+    <section id="features" className="bg-background text-foreground py-20 lg:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-4xl mx-auto mb-20">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary border-primary/20">
+            <Star className="h-3 w-3 mr-1" />
+            <span data-editable="badge">{config.badge}</span>
+          </Badge>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
             <span data-editable="title">{config.title}</span>
           </h2>
-          <p className="text-xl sm:text-2xl text-muted-foreground mb-6">
+
+          <p className="text-lg text-muted-foreground leading-relaxed">
             <span data-editable="subtitle">{config.subtitle}</span>
           </p>
-          <p className="text-lg text-muted-foreground mb-8">
-            <span data-editable="description">{config.description}</span>
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              onClick={handleCtaClick}
-              data-editable-href="ctaHref"
-              data-href={config.ctaHref}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              <span data-editable="ctaText">{config.ctaText}</span>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={handleSecondaryCtaClick}
-              data-editable-href="secondaryCtaHref"
-              data-href={config.secondaryCtaHref}
-              className="border-border hover:bg-accent hover:text-accent-foreground"
-            >
-              <span data-editable="secondaryCtaText">{config.secondaryCtaText}</span>
-            </Button>
-          </div>
         </div>
 
         {/* Features Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {config.features.map((feature, idx) => {
-            const IconComponent = iconMap[feature.icon as keyof typeof iconMap] || Zap;
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-16">
+          {config.features.map((feature, idx) => (
+            <Card
+              key={idx}
+              className="bg-card text-card-foreground border-border hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+            >
+              <CardContent className="p-8">
+                <div className="bg-primary/10 text-primary w-12 h-12 rounded-lg flex items-center justify-center mb-6">
+                  {getIcon(feature.icon)}
+                </div>
 
-            return (
-              <Card
-                key={feature.id}
-                className="bg-card text-card-foreground border-border hover:shadow-lg transition-shadow duration-300"
-              >
-                <CardContent className="p-8">
-                  <div className="flex items-center mb-4">
-                    <div className="bg-primary/10 text-primary p-3 rounded-lg mr-4">
-                      <IconComponent className="w-6 h-6" />
-                    </div>
-                    <h3 className="text-xl font-semibold">
-                      <span data-editable={`features[${idx}].title`}>{feature.title}</span>
-                    </h3>
-                  </div>
+                <h3 className="text-xl font-semibold mb-4">
+                  <span data-editable={`features[${idx}].title`}>{feature.title}</span>
+                </h3>
 
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
-                    <span data-editable={`features[${idx}].description`}>
-                      {feature.description}
-                    </span>
-                  </p>
+                <p className="text-muted-foreground mb-6 leading-relaxed">
+                  <span data-editable={`features[${idx}].description`}>{feature.description}</span>
+                </p>
 
-                  <div className="space-y-2">
-                    {feature.highlights.map((highlight, highlightIdx) => (
-                      <div key={highlightIdx} className="flex items-center text-sm">
-                        <Check className="w-4 h-4 text-primary mr-2 flex-shrink-0" />
-                        <span data-editable={`features[${idx}].highlights[${highlightIdx}]`}>
-                          {highlight}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+                <ul className="space-y-2">
+                  {feature.highlights.map((highlight, highlightIdx) => (
+                    <li key={highlightIdx} className="flex items-center text-sm">
+                      <Check className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
+                      <span data-editable={`features[${idx}].highlights[${highlightIdx}]`}>
+                        {highlight}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-20">
-          <div className="bg-muted text-muted-foreground rounded-2xl p-8 sm:p-12">
-            <h3 className="text-2xl sm:text-3xl font-bold mb-4 text-foreground">
-              Ready to transform your development workflow?
-            </h3>
-            <p className="text-lg mb-8 max-w-2xl mx-auto">
-              Join thousands of developers who have already accelerated their projects with our
-              platform.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                onClick={handleCtaClick}
-                data-editable-href="ctaHref"
-                data-href={config.ctaHref}
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                <span data-editable="ctaText">{config.ctaText}</span>
-              </Button>
-              <Badge
-                variant="secondary"
-                className="bg-secondary text-secondary-foreground px-4 py-2 text-sm"
-              >
-                No credit card required
-              </Badge>
+        {/* Pricing CTA */}
+        <div className="text-center">
+          <div className="bg-primary/5 border border-primary/20 rounded-2xl p-8 max-w-md mx-auto mb-8">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <span className="text-2xl font-bold text-muted-foreground line-through">
+                <span data-editable="pricing.monthlyPrice">{config.pricing.monthlyPrice}</span>
+              </span>
+              <ArrowRight className="h-4 w-4 text-muted-foreground" />
+              <span className="text-3xl font-bold text-primary">
+                <span data-editable="pricing.annualPrice">{config.pricing.annualPrice}</span>
+                <span className="text-sm text-muted-foreground font-normal">/month</span>
+              </span>
             </div>
+
+            <Badge variant="destructive" className="mb-2">
+              <span data-editable="pricing.discount">{config.pricing.discount}</span>
+            </Badge>
+
+            <p className="text-sm text-muted-foreground">
+              <span data-editable="pricing.billingNote">{config.pricing.billingNote}</span>
+            </p>
           </div>
+
+          <Button
+            size="lg"
+            onClick={handleCTAClick}
+            data-editable-href="ctaHref"
+            data-href={config.ctaHref}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105"
+          >
+            <span data-editable="ctaText">{config.ctaText}</span>
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
         </div>
       </div>
     </section>
